@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<nlog xmlns="http://www.nlog-project.org/schemas/NLog.xsd"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <targets>
+    <target name="LogFile" xsi:type="File" fileName="./logs/nlog-${date:format=yyyy-MM-dd}.log"
+            layout="${uppercase:${level}}|${date:format=HH\:mm\:ss.fff}|${message}|${exception}"/>
+    <target name="LogConsole" xsi:type="ColoredConsole"
+			layout="${uppercase:${level}}|${date:format=HH\:mm\:ss.fff}|${logger}|${message}|${exception}"/>
+  </targets>
+
+  <rules>
+    <logger name="*" minlevel="Trace" writeTo="LogConsole" />
+    <logger name="Moex*" minlevel="Debug" writeTo="LogFile" />
+  </rules>
+</nlog>

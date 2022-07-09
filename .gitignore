@@ -1,0 +1,6 @@
+/MoexApi/bin/*
+/MoexApi/obj/*
+/.vs/*
+/MoexApiApp/bin/*
+/MoexApiApp/obj/*
+/MoexApiApp/.vs

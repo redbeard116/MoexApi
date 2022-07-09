@@ -1,0 +1,1 @@
+﻿global using MoexApiApp.Models.Settings;
