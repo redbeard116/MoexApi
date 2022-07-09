@@ -1,4 +1,5 @@
-﻿using MoexApi.Providers.RequestProvider;
+﻿using MoexApi.Models;
+using MoexApi.Providers.RequestProvider;
 
 namespace MoexApi.Services.SecuritiesService
 {
@@ -7,8 +8,11 @@ namespace MoexApi.Services.SecuritiesService
         /// <summary>
         /// Список бумаг торгуемых на московской бирже
         /// </summary>
-        /// <returns></returns>
-        Task GetSecurities();
+        /// <param name="q">Поиск инструмента по части Кода, Названию, ISIN, Идентификатору Эмитента, Номеру гос.регистрации.
+        //Например: https://iss.moex.com/iss/securities.xml?q=MOEX
+        //Слова длиной менее трёх букв игнорируются.Если параметром передано два слова через пробел. То каждое должно быть длиной не менее трёх букв.</param>
+        /// <returns>Список бумаг</returns>
+        Task<Security> GetSecurities(string q = "MOEX");
     }
 
     internal class SecuritiesService : ISecuritiesService
@@ -27,13 +31,18 @@ namespace MoexApi.Services.SecuritiesService
         #endregion
 
         #region ISecuritiesService
-        public async Task GetSecurities()
+        public async Task<Security> GetSecurities(string q = "MOEX")
         {
             try
             {
                 _logger.LogInformation("Get securities");
 
-                var result = await _requestProvider.GetString("securities.json");
+                var parameters = new Dictionary<string, string>
+                {
+                    {"q", q }
+                };
+
+                return await _requestProvider.GetJson<Security>("securities.json", parameters);
             }
             catch (Exception ex)
             {

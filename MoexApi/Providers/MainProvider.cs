@@ -43,7 +43,7 @@ namespace MoexApi.Providers
 
                 var securitiesService = GetService<ISecuritiesService>();
 
-                await securitiesService.GetSecurities();
+                var result = await securitiesService.GetSecurities();
             }
             catch (Exception ex)
             {

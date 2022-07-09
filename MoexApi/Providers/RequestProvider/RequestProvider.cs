@@ -71,8 +71,13 @@ namespace MoexApi.Providers.RequestProvider
         private string ConstructUrl(string requestUrl, Dictionary<string, string> parameters = null)
         {
             parameters = parameters ?? new Dictionary<string, string>();
+            var url = requestUrl + @"?" + GetString(parameters);
+            return url;
+        }
 
-            return requestUrl;
+        private string GetString(Dictionary<string, string> parameters)
+        {
+            return string.Join("&", parameters.Select(x => $"{x.Key}={x.Value}"));
         }
         #endregion
     }
