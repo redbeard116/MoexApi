@@ -16,16 +16,18 @@ namespace MoexApi.Providers.RequestProvider
         #region Fields
         private readonly IHttpClientFactory _clientFactory;
         private readonly ILogger<RequestProvider> _logger;
+        private readonly string _lang;
 
         private HttpClient _client;
         #endregion
 
         #region Constructor
-        public RequestProvider(IHttpClientFactory clientFactory, ILogger<RequestProvider> logger)
+        public RequestProvider(IHttpClientFactory clientFactory, ILogger<RequestProvider> logger, string lang = "ru")
         {
             _clientFactory = clientFactory;
             _client = _clientFactory.CreateClient("ApiHttp");
             _logger = logger;
+            _lang = lang;
         }
         #endregion
 
@@ -77,7 +79,17 @@ namespace MoexApi.Providers.RequestProvider
 
         private string GetString(Dictionary<string, string> parameters)
         {
-            return string.Join("&", parameters.Select(x => $"{x.Key}={x.Value}"));
+            if (parameters == null)
+            {
+                parameters = new Dictionary<string, string>();
+            }
+
+            if (!parameters.ContainsKey("lang"))
+            {
+                parameters.Add("lang", _lang);
+            }
+
+            return string.Join("&", parameters.Where(w => w.Value != null).Select(x => $"{x.Key}={x.Value}"));
         }
         #endregion
     }

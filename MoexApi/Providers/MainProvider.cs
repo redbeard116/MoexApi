@@ -2,6 +2,8 @@
 using MoexApi.Providers.RequestProvider;
 using MoexApi.Services.AuthService;
 using MoexApi.Services.SecuritiesService;
+using MoexApi.Services.TurnoversService;
+using MoexApi.Services.Новая_папка;
 
 namespace MoexApi.Providers
 {
@@ -77,6 +79,8 @@ namespace MoexApi.Providers
             serviceCollection.AddSingleton<IAuthService, AuthService>();
             serviceCollection.AddSingleton<IRequestProvider, RequestProvider.RequestProvider>();
             serviceCollection.AddSingleton<ISecuritiesService, SecuritiesService>();
+            serviceCollection.AddSingleton<ITurnoversService, TurnoversService>();
+            serviceCollection.AddSingleton<IEnginesService, EnginesService>();
 
             _serviceCollection = serviceCollection.BuildServiceProvider();
         }
