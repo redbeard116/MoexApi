@@ -2,19 +2,7 @@
 
 namespace MoexApi.Models.Base
 {
-    public abstract class MetadataBase
-    {
-        [JsonProperty("name")]
-        public Name Name { get; set; }
-
-        [JsonProperty("id")]
-        public Id Id { get; set; }
-
-        [JsonProperty("title")]
-        public Name Title { get; set; }
-    }
-
-    public class Name
+    public class MetadataValue
     {
         [JsonProperty("type")]
         public string Type { get; set; }
@@ -26,7 +14,7 @@ namespace MoexApi.Models.Base
         public long MaxSize { get; set; }
     }
 
-    public class Id
+    public class ValueType
     {
         [JsonProperty("type")]
         public string Type { get; set; }

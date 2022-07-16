@@ -3,7 +3,9 @@ using MoexApi.Providers.RequestProvider;
 using MoexApi.Services.AuthService;
 using MoexApi.Services.SecuritiesService;
 using MoexApi.Services.TurnoversService;
-using MoexApi.Services.Новая_папка;
+using MoexApi.Services.EnginesService;
+using MoexApi.Services.HistoryServices;
+using System.Globalization;
 
 namespace MoexApi.Providers
 {
@@ -43,9 +45,20 @@ namespace MoexApi.Providers
                 var authService = GetService<IAuthService>();
                 var cookies = await authService.Login(login, password);
 
-                var securitiesService = GetService<ISecuritiesService>();
+                var securitiesService = GetService<IHistoryServices>();
 
-                var result = await securitiesService.GetSecurities();
+                var startDate = new DateTime(2022, 04, 29);
+                var endDate = DateTime.Now;
+                Models.Historyes histories = await securitiesService.GetEngineHistory("SBER", startDate, endDate);
+
+                var closeColumn = histories.History.Columns.FirstOrDefault(w => w == "CLOSE");
+
+                var closeColunmIndex = Array.IndexOf(histories.History.Columns, closeColumn);
+
+                var valuesByDays = histories.History.Data.Where(w=> !string.IsNullOrWhiteSpace(w[closeColunmIndex])).Select(w => double.Parse(w[closeColunmIndex], CultureInfo.InvariantCulture));
+
+                var averageValue = valuesByDays.Average();
+
             }
             catch (Exception ex)
             {
@@ -81,6 +94,7 @@ namespace MoexApi.Providers
             serviceCollection.AddSingleton<ISecuritiesService, SecuritiesService>();
             serviceCollection.AddSingleton<ITurnoversService, TurnoversService>();
             serviceCollection.AddSingleton<IEnginesService, EnginesService>();
+            serviceCollection.AddSingleton<IHistoryServices, HistoryServices>();
 
             _serviceCollection = serviceCollection.BuildServiceProvider();
         }
